@@ -1,12 +1,28 @@
+
 import React from 'react';
 import './App.css';
 
-import {useState} from 'react'
+import {useEffect,useState} from 'react'
 function App() {
-  const [toDos,setTodos]= useState([])
+  const [toDos,setTodos]= useState(()=>{
+    // getting stored toDos data from localStorage
+    const saved = localStorage.getItem("Storage");
+    const initialValue = JSON.parse(saved);
+    return (initialValue || "");
+ })
   const [toDo,setTodo]=useState('')
 
 
+ //Program to removing correspondend toDos data from localStorage of browser
+ const index = toDos && toDos.findIndex(obj => obj.statusRemove == true);
+ // console.log(index);
+ if (index > -1) toDos && toDos.splice((index), 1);
+
+
+ useEffect(() => {
+  // storing toDos data to localStorage of browser
+  localStorage.setItem("Storage", JSON.stringify(toDos));
+}, [toDos]);
 
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const date = new Date();
